@@ -19,43 +19,7 @@ using std::to_string;
 #include <iterator>
 using std::back_inserter;
 
-#define USE_BOOST
-#ifdef USE_BOOST
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wconversion"
-#include </usr/local/include/boost/multiprecision/cpp_int.hpp>
-#pragma clang diagnostic pop
-
-using namespace boost::multiprecision;
-using BigInt = cpp_int;
-#else
-using BigInt = unsigned long long;
-#endif
-
-BigInt nChoosek( unsigned n, unsigned k )
-{
-    if (k > n) return 0;
-    if (k * 2 > n) k = n-k;
-    if (k == 0) return 1;
-    
-    BigInt result = n;
-    for( int i = 2; i <= k; ++i ) {
-        result *= (n-i+1);
-        result /= i;
-    }
-    return result;
-}
-
-BigInt ipower(BigInt a, BigInt n) {
-    BigInt res = 1;
-    while (n) {
-        if (n & 1)
-            res *= a;
-        a *= a;
-        n >>= 1;
-    }
-    return res;
-}
+#include "util.h"
 
 struct binDistribution {
     int binsWith4SpotsFilled;
