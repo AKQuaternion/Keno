@@ -8,8 +8,9 @@
 
 #ifndef __Keno2__util__
 #define __Keno2__util__
+#include <vector>
 
-#define USE_BOOST
+//#define USE_BOOST
 #ifdef USE_BOOST
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wconversion"
@@ -19,11 +20,13 @@
 using namespace boost::multiprecision;
 using BigInt = cpp_int;
 #else
-using BigInt = unsigned long long;
+using BigInt = long long;
 #endif
 
-BigInt nChoosek( unsigned n, unsigned k );
+BigInt nChoosek( int n, int k );
 
-BigInt ipower(BigInt a, BigInt n);
+BigInt iPower(BigInt a, unsigned long long n);
+
+BigInt multi(const std::vector<int> &cs);
 
 #endif /* defined(__Keno2__util__) */
