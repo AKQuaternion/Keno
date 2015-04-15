@@ -22,6 +22,7 @@ using std::back_inserter;
 
 #include "util.h"
 #include "BinHits.h"
+#include "CardResults.h"
 
 struct binDistribution {
     int binsWith4SpotsFilled;
@@ -202,7 +203,7 @@ cout << total << endl;
 }
 
 vector<vector<int>> bins(int numBalls, int numBins, int binSize)
-{
+{//all ways of distributing numBalls into numBins of size binSize
     if (binSize == 0)
         {
         if(numBalls==0)
@@ -252,10 +253,15 @@ vector<BinHits>  binsTwoSizes(int numType1Bins, int binType1Size, int numType2Bi
     return result;
 }
 
-vector<BinHits> binsDriver(int numBins, int binSize)
+vector<BinHits> cards(int numBins, int binSize)
 {
     int spotsUnused = 80 - numBins*binSize;
     return binsTwoSizes(numBins,binSize,spotsUnused,1);
+}
+
+vector<BinHits>  cards(int numType1Bins, int binType1Size, int numType2Bins, int binType2Size)
+{
+return binsTwoSizes(numType1Bins, binType1Size, numType2Bins, binType2Size);
 }
 
 void show(const vector<BinHits> &bins)
@@ -270,13 +276,13 @@ void show(const vector<BinHits> &bins)
     }
     cout << endl;
 
-    cout << " Label ";
+    cout << "Label  ";
     for(auto bD:bDs){
         cout << "|   ";
         for(int ii=0;ii<bD.size();++ii)
             cout << ii << "s" << "   ";
     }
-    cout << "|" << endl;
+    cout << "|                 #Ways" << endl;
     
     unsigned long long total=0;
     for(const auto &v:bins) {
@@ -286,17 +292,16 @@ void show(const vector<BinHits> &bins)
                 cout << setw(4) << i << " ";
             cout << "    ";
             }
-        cout << "   " << v.numWays();
+        cout << "   " << setw(18) << v.numWays();
         total += v.numWays();
         cout << endl;
     }
-    cout << "Total number of ways: " << total << endl;
+    cout << "Total number of ways: " << total << " ";
     if (total == 3535316142212174320)
-        cout << "Which is 80 choose 20" << endl;
+        cout << "(Which is 80 choose 20.)" << endl;
     else
         cout << "(NOT 80 choose 20!!!! Alert!!!)" << endl;
 }
-
 
 int main() {
     assert((BinHits{{{15,0,0,0,5}}}.numWays()==15504));
@@ -314,10 +319,12 @@ int main() {
 //    auto partitions = binsDriver(20,11,7);
 //    auto partitions = binsTwoSizesDriver(11,4,12,3);
 //    auto partitions = binsTwoSizesDriver(10,4,13,3);
-//    show(binsDriver(20, 4));
-//    show(binsTwoSizes(11,4,12,3));
-//    show(binsTwoSizes(10,4,13,3));
-    show(binsDriver(11,7));
+//    show(cards(11,4,12,3));
+//    show(cards(10,4,13,3));
+//    show(cards(11,7));
+    show(cards(20, 4));
+    PayoutResults p(8,262000,cards(20,4));
+    p.showStats();
     return 0;
 }
 
