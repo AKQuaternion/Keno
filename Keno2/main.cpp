@@ -18,8 +18,10 @@ using std::string;
 using std::to_string;
 #include <iterator>
 using std::back_inserter;
+#include <cassert>
 
 #include "util.h"
+#include "BinHits.h"
 
 struct binDistribution {
     int binsWith4SpotsFilled;
@@ -96,9 +98,9 @@ vector<binDistribution> calcBinDistributions()
                 
                 BigInt waysToChooseBins = 1;
                 waysToChooseBins *= nChoosek(numberOfBins,k4);
-                waysToChooseBins *= nChoosek(numberOfBins-k4,k3)       * ipower(4,k3);
-                waysToChooseBins *= nChoosek(numberOfBins-k4-k3,k2)    * ipower(6,k2);
-                waysToChooseBins *= nChoosek(numberOfBins-k4-k3-k2,k1) * ipower(4,k1);
+                waysToChooseBins *= nChoosek(numberOfBins-k4,k3)       * iPower(4,k3);
+                waysToChooseBins *= nChoosek(numberOfBins-k4-k3,k2)    * iPower(6,k2);
+                waysToChooseBins *= nChoosek(numberOfBins-k4-k3-k2,k1) * iPower(4,k1);
                 bd.waysThisCanHappen = waysToChooseBins;
                 
                 BigInt thisTimeResult = 0;
@@ -118,122 +120,6 @@ vector<binDistribution> calcBinDistributions()
             }
     
     return binDistributions;
-}
-
-void displayBinDistributions20x4() { //suitable for pasting into Excel
-    const int ballsChosen = 20;
-    for(int k4 = ballsChosen/4; k4 >= 0; --k4)
-        for(int k3 = (ballsChosen-4*k4)/3; k3 >= 0; --k3)
-            for(int k2 = (ballsChosen-4*k4-3*k3)/2; k2 >= 0; --k2){
-                int k1 = ballsChosen-4*k4-3*k3-2*k2;
-                
-                cout << k4 << " " << k3 << " " << k2 << " " << k1 << endl;
-            }
-    
-}
-
-BigInt ways10p13(int k44,int k43, int k42, int k41, int k33, int k32, int k31)
-{
-    BigInt ways = 1;
-    ways *= nChoosek(10, k44);
-    ways *= nChoosek(10-k44        , k43)    * ipower(4,k43);
-    ways *= nChoosek(10-k44-k43    , k42)    * ipower(6,k42);
-    ways *= nChoosek(10-k44-k43-k42, k41)    * ipower(4,k41);
-    ways *= nChoosek(13        , k33);
-    ways *= nChoosek(13-k33    , k32) * ipower(3,k32);
-    ways *= nChoosek(13-k33-k32, k31) * ipower(3,k31);
-    return ways;
-}
-
-BigInt ways11p12(int k44,int k43, int k42, int k41, int k33, int k32, int k31)
-{
-    BigInt ways = 1;
-    ways *= nChoosek(11, k44);
-    ways *= nChoosek(11-k44        , k43)    * ipower(4,k43);
-    ways *= nChoosek(11-k44-k43    , k42)    * ipower(6,k42);
-    ways *= nChoosek(11-k44-k43-k42, k41)    * ipower(4,k41);
-    ways *= nChoosek(12        , k33);
-    ways *= nChoosek(12-k33    , k32) * ipower(3,k32);
-    ways *= nChoosek(12-k33-k32, k31) * ipower(3,k31);
-    return ways;
-}
-
-void displayBinDistributuions11x7()
-{
-//    const int ballsChosen = 20;
-//    for(int k77 = ballsChosen/7; k77 >= 0; --k77)
-//        for(int k76 = (ballsChosen-7*k77)/6; k76 >= 0; --k76)
-//            for(int k75 = (ballsChosen-7*k77-6*k76)/5; k75 >= 0; --k75) {
-//                
-//                
-//            }
-// some sort of on the fly for loops? for 1..7 calculate and run
-}
-
-void displayBinDistributions10x4p13x3() { //suitable for pasting into Excel
-    BigInt progressives = 0;
-    BigInt total = 0;
-    int ballsChosen = 20;
-    for(int k44 = ballsChosen/4; k44 >= 0; --k44)
-    for(int k43 = (ballsChosen-4*k44)/3; k43 >= 0; --k43)
-    for(int k42 = (ballsChosen-4*k44-3*k43)/2; k42 >= 0; --k42)
-    for(int k41 = min(ballsChosen-4*k44-3*k43-2*k42,10-k44-k43-k42); k41 >= 0; --k41) {
-        const int ballsLeft = ballsChosen-4*k44-3*k43-2*k42-k41;
-        for(int k33 = ballsLeft/3; k33 >= 0; --k33)
-        for(int k32 = (ballsLeft-3*k33)/2; k32 >= 0; --k32) {
-        int k31 = ballsLeft-3*k33-2*k32;
-            if (k31 > 13 - k33-k32)
-                continue;
-            cout << k44 << " " << k43 << " " << k42 << " " << k41 << " " << 10-k44-k43-k42-k41 << " " << k33 << " " << k32 << " " << k31 << " " << 13-k33-k32-k31 << " " << 0 << endl;
-            total += ways10p13(k44,k43,k42,k41,k33,k32,k31);
-            if (k44>0 && k33>0)
-                progressives += ways10p13(k44,k43,k42,k41,k33,k32,k31);
-        }
-    }
-    ballsChosen = 19;
-    for(int k44 = ballsChosen/4; k44 >= 0; --k44)
-        for(int k43 = (ballsChosen-4*k44)/3; k43 >= 0; --k43)
-            for(int k42 = (ballsChosen-4*k44-3*k43)/2; k42 >= 0; --k42)
-                for(int k41 = min(ballsChosen-4*k44-3*k43-2*k42,10-k44-k43-k42); k41 >= 0; --k41) {
-                    const int ballsLeft = ballsChosen-4*k44-3*k43-2*k42-k41;
-                    for(int k33 = ballsLeft/3; k33 >= 0; --k33)
-                        for(int k32 = (ballsLeft-3*k33)/2; k32 >= 0; --k32) {
-                            int k31 = ballsLeft-3*k33-2*k32;
-                            if (k31 > 13 - k33-k32)
-                                continue;
-                            cout << k44 << " " << k43 << " " << k42 << " " << k41 << " " << 10-k44-k43-k42-k41 << " " << k33 << " " << k32 << " " << k31 << " " << 13-k33-k32-k31 << " " << 1 << endl;
-                            total += ways10p13(k44,k43,k42,k41,k33,k32,k31);
-                            if (k44>0 && k33>0)
-                                progressives += ways10p13(k44,k43,k42,k41,k33,k32,k31);
-                        }
-                }
-    cout << total << endl;
-    cout << progressives << " " << double(progressives)/(double)total << endl;
-}
-
-void displayBinDistributions11x4p12x3() { //suitable for pasting into Excel
-    BigInt progressives = 0;
-    BigInt total = 0;
-    int ballsChosen = 20;
-    for(int k44 = ballsChosen/4; k44 >= 0; --k44)
-        for(int k43 = (ballsChosen-4*k44)/3; k43 >= 0; --k43)
-            for(int k42 = (ballsChosen-4*k44-3*k43)/2; k42 >= 0; --k42)
-                for(int k41 = min(ballsChosen-4*k44-3*k43-2*k42,11-k44-k43-k42); k41 >= 0; --k41) {
-                    const int ballsLeft = ballsChosen-4*k44-3*k43-2*k42-k41;
-                    for(int k33 = ballsLeft/3; k33 >= 0; --k33)
-                        for(int k32 = (ballsLeft-3*k33)/2; k32 >= 0; --k32) {
-                            int k31 = ballsLeft-3*k33-2*k32;
-                            if (k31 > 12 - k33-k32)
-                                continue;
-//                            cout << k44 << " " << k43 << " " << k42 << " " << k41 << " " << 11-k44-k43-k42-k41 << " " << k33 << " " << k32 << " " << k31 << " " << 12-k33-k32-k31 << " " << 0 << endl;
-                            cout << ways11p12(k44,k43,k42,k41,k33,k32,k31) << endl;
-                            total += ways11p12(k44,k43,k42,k41,k33,k32,k31);
-                            if (k44>0 && k33>0)
-                                progressives += ways11p12(k44,k43,k42,k41,k33,k32,k31);
-                        }
-                }
-    cout << total << endl;
-    cout << progressives << " " << double(progressives)/(double)total << endl;
 }
 
 void simulateSingleGame(const vector<binDistribution> & bins)
@@ -305,52 +191,6 @@ void simulate(const vector<binDistribution> & bins)
     }
 }
 
-
-
-void simulate7spots(const vector<binDistribution> & bins)
-{
-//    const long initialBankroll = 1'200'000;
-//    std::random_device rd;
-//    std::default_random_engine e1(rd());
-//    
-//    vector<BigInt> probs;
-//    for(auto &bd:bins)
-//        probs.push_back(bd.waysThisCanHappen);
-//    std::discrete_distribution<int> dist(probs.begin(),probs.end());
-//    
-//    BigInt trial = 0;
-//    BigInt busts = 0;
-//    
-//    double cumulativeResult = 0;
-//    long bankroll;
-//    while(1) {
-//        BigInt addedToMeter = 0;
-//        bankroll = initialBankroll;
-//        ++trial;
-//        
-//        bool hit =false;
-//        while(bankroll >= 285 && !hit) {
-//            int cards = min(56,int(bankroll/285));
-//            addedToMeter += 95*cards;
-//            for (int ii=0;ii<cards;++ii) {
-//                auto b = bins[dist(e1)];
-//                bankroll -= 285;
-//                bankroll += b.payout;
-//                if (b.binsWith4SpotsFilled > 1)
-//                    {
-//                    hit = true;
-//                    bankroll += addedToMeter;
-//                    }
-//                }
-//        }
-//        if (bankroll < 285)
-//            ++busts;
-//        cumulativeResult += (bankroll - initialBankroll);
-//        if (trial % 10000 == 0)
-//            cout << "Trials: " << trial << " Bust probability: " << double(busts)/trial << ", average result: " << cumulativeResult/trial << endl;
-//    }
-}
-
 void calcProgressivesIE11x4p12x3()
 {
 BigInt total = 0;
@@ -361,80 +201,107 @@ for(int s4=1;s4<=20/4;++s4)
 cout << total << endl;
 }
 
-vector<string> bins(int numBalls, int numBins, int binSize)
+vector<vector<int>> bins(int numBalls, int numBins, int binSize)
 {
-    vector<string> result;
     if (binSize == 0)
         {
         if(numBalls==0)
-            return vector<string>{to_string(numBins)+" "};
+            return {{numBins}};
         else
-            return vector<string>();
+            return vector<vector<int>>();
         }
     
+    vector<vector<int>> result;
     int maxFullBins = min(numBalls/binSize,numBins);
     for(int fullBins = maxFullBins; fullBins>=0; --fullBins) {
-        string theseBins;
-//        for (int bin = 0; bin<fullBins; ++bin )
-//            theseBins += to_string(binSize) + " ";
-        theseBins += to_string(fullBins)+" ";
         int binsLeft = numBins-fullBins;
         int ballsLeft = numBalls - binSize*fullBins;
         
         auto theRest = bins(ballsLeft, binsLeft, binSize-1);
         for (auto binDist : theRest) {
-            result.emplace_back(theseBins+binDist);
+            binDist.push_back(fullBins);
+            result.emplace_back(binDist);
         }
     }
     return result;
 }
 
-vector<string> binsTwoSizes(int numBalls, int numType1Bins, int binType1Size, int numType2Bins, int binType2Size)
+vector<BinHits>  binsTwoSizes(int numType1Bins, int binType1Size, int numType2Bins, int binType2Size)
 {
-    vector<string> result;
+    vector<BinHits> result;
     
-    for(int ballsInType1Bins = numBalls; ballsInType1Bins >= 0; --ballsInType1Bins) {
-        int ballsInType2Bins = numBalls-ballsInType1Bins;
-        auto type1Distributions = bins(ballsInType1Bins,numType1Bins,binType1Size);
-        auto type2Distributions = bins(ballsInType2Bins,numType2Bins,binType2Size);
-        for( auto t1Dist : type1Distributions)
-            for (auto t2Dist : type2Distributions)
-                result.emplace_back(t1Dist+t2Dist);
-    }
-
-    return result;
-}
-
-vector<string> binsDriver(int numBins, int binSize)
-{
-    const int numBalls=20;
-    vector<string> result;
-    int spotsUnused = 80 - numBins*binSize;
-    for(int ballsInUnusedSpots = 0; ballsInUnusedSpots <= spotsUnused; ++ballsInUnusedSpots){
-        auto some = bins(numBalls-ballsInUnusedSpots,numBins,binSize);
-        for( auto dist : some){
-            dist += to_string(ballsInUnusedSpots);
-            result.emplace_back(move(dist));
-        }
-    }
-    
-    return result;
-}
-
-vector<string> binsTwoSizesDriver(int numType1Bins, int binType1Size, int numType2Bins, int binType2Size)
-{
-    const int numBalls=20;
-    vector<string> result;
     int spotsUnused = 80 - numType1Bins*binType1Size - numType2Bins*binType2Size;
     for(int ballsInUnusedSpots = 0; ballsInUnusedSpots <= spotsUnused; ++ballsInUnusedSpots){
-        auto some = binsTwoSizes(numBalls-ballsInUnusedSpots,numType1Bins,binType1Size,numType2Bins,binType2Size);
-        result.insert(end(result),begin(some),end(some));
+        int numBallsLeft = 20-ballsInUnusedSpots;
+        for(int ballsInType1Bins = numBallsLeft; ballsInType1Bins >= 0; --ballsInType1Bins) {
+            int ballsInType2Bins = numBallsLeft-ballsInType1Bins;
+            auto type1Distributions = bins(ballsInType1Bins,numType1Bins,binType1Size);
+            auto type2Distributions = bins(ballsInType2Bins,numType2Bins,binType2Size);
+            for( auto t1Dist : type1Distributions)
+                for (auto t2Dist : type2Distributions) {
+                    vector<decltype(t1Dist)> binDists{t1Dist};
+                    if (numType2Bins != 0)
+                        binDists.push_back(t2Dist);
+                    if (spotsUnused>0)
+                        binDists.push_back(vector<int>{spotsUnused-ballsInUnusedSpots,ballsInUnusedSpots});
+                        result.emplace_back(BinHits{binDists});
+                }
+        }
     }
     
     return result;
 }
 
+vector<BinHits> binsDriver(int numBins, int binSize)
+{
+    int spotsUnused = 80 - numBins*binSize;
+    return binsTwoSizes(numBins,binSize,spotsUnused,1);
+}
+
+void show(const vector<BinHits> &bins)
+{
+    int count = 0;
+    
+    cout << "       |";
+    auto bDs = bins.front().getBinDistributions();
+    for(auto bD:bDs) {
+        int spaces = (int)bD.size()*5+2;
+        cout << setw(spaces/2-1) << bD.size()-1 << "-bins" << setw(spaces-(spaces/2)-2) << "|";
+    }
+    cout << endl;
+
+    cout << " Label ";
+    for(auto bD:bDs){
+        cout << "|   ";
+        for(int ii=0;ii<bD.size();++ii)
+            cout << ii << "s" << "   ";
+    }
+    cout << "|" << endl;
+    
+    unsigned long long total=0;
+    for(const auto &v:bins) {
+        cout << setw(5) << ++count << "    ";
+        for(auto bd : v.getBinDistributions()) {
+            for(auto i : bd)
+                cout << setw(4) << i << " ";
+            cout << "    ";
+            }
+        cout << "   " << v.numWays();
+        total += v.numWays();
+        cout << endl;
+    }
+    cout << "Total number of ways: " << total << endl;
+    if (total == 3535316142212174320)
+        cout << "Which is 80 choose 20" << endl;
+    else
+        cout << "(NOT 80 choose 20!!!! Alert!!!)" << endl;
+}
+
+
 int main() {
+    assert((BinHits{{{15,0,0,0,5}}}.numWays()==15504));
+    assert((BinHits{{{10,6,1,0,3}}}.numWays()==3814073303040ull));
+    
 //    auto bins = calcBinDistributions();
 //    displayStats(bins);
 //    simulateSingleGame(bins);
@@ -444,13 +311,14 @@ int main() {
 //    displayBinDistributions11x4p12x3();
 //    calcProgressivesIE11x4p12x3();
 //    cout << nChoosek(80,20) << " should be\n3535316142212174320" << endl;
-//    auto partitions = binsDriver(20,20,4);
 //    auto partitions = binsDriver(20,11,7);
 //    auto partitions = binsTwoSizesDriver(11,4,12,3);
-    auto partitions = binsTwoSizesDriver(10,4,13,3);
-    int count = 0;
-    for( auto p:partitions)
-        cout << setw(4) << ++count << ":    " << p << endl;
+//    auto partitions = binsTwoSizesDriver(10,4,13,3);
+//    show(binsDriver(20, 4));
+//    show(binsTwoSizes(11,4,12,3));
+//    show(binsTwoSizes(10,4,13,3));
+    show(binsDriver(11,7));
+    return 0;
 }
 
 /*
