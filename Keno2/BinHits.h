@@ -22,11 +22,11 @@ class BinHits
 {
 public:
     BinHits(const BinDistributions&);
-    BigInt numWays() const;
+    unsigned long long numWays() const;
     BinDistributions getBinDistributions() const;
 private:
     BinDistributions _binDistributions;
-    BigInt _numWays;
+    unsigned long long _numWays;
 };
 
 #endif /* defined(__Keno2__BinHits__) */

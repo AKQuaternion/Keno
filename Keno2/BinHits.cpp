@@ -38,7 +38,7 @@ BinDistributions BinHits::getBinDistributions() const
     return _binDistributions;
 }
 
-BigInt BinHits::numWays() const
+unsigned long long BinHits::numWays() const
 {
     return _numWays;
 }
