@@ -9,7 +9,7 @@
 #include "util.h"
 #include <numeric>
 
-BigInt nChoosek( int n, int k )
+unsigned long long nChoosek( int n, int k )
 {
     if (k > n) return 0;
     if (k * 2 > n) k = n-k;
@@ -20,10 +20,10 @@ BigInt nChoosek( int n, int k )
         result *= (n-i+1);
         result /= i;
     }
-    return result;
+    return (unsigned long long)result;
 }
 
-BigInt iPower(BigInt a, unsigned long long n) {
+unsigned long long iPower(BigInt a, unsigned long long n) {
     BigInt res = 1;
     while (n) {
         if (n & 1)
@@ -31,10 +31,10 @@ BigInt iPower(BigInt a, unsigned long long n) {
         a *= a;
         n >>= 1;
     }
-    return res;
+    return (unsigned long long)res;
 }
 
-BigInt multi(const std::vector<int> &cs)
+unsigned long long multi(const std::vector<int> &cs)
 {
     int sumOfCs = std::accumulate(begin(cs),end(cs),0);
     BigInt m{1};
@@ -42,5 +42,5 @@ BigInt multi(const std::vector<int> &cs)
         m *= nChoosek(sumOfCs, c);
         sumOfCs -= c;
     }
-    return m;
+    return (unsigned long long)m;
 }
