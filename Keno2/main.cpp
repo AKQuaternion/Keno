@@ -307,34 +307,26 @@ int main() {
     assert((BinHits{{{15,0,0,0,5}}}.numWays()==15504));
     assert((BinHits{{{10,6,1,0,3}}}.numWays()==3814073303040ull));
     
-//    auto bins = calcBinDistributions();
-//    displayStats(bins);
-//    simulateSingleGame(bins);
-//    simulate(bins);
-//    displayBinDistributions();
-//    displayBinDistributions10x4p13x3();
-//    displayBinDistributions11x4p12x3();
-//    calcProgressivesIE11x4p12x3();
-//    cout << nChoosek(80,20) << " should be\n3535316142212174320" << endl;
-//    auto partitions = binsDriver(20,11,7);
-//    auto partitions = binsTwoSizesDriver(11,4,12,3);
-//    auto partitions = binsTwoSizesDriver(10,4,13,3);
-//    show(cards(11,4,12,3));
-//    show(cards(10,4,13,3));
-//    show(cards(11,7));
-    show(cards(20, 4));
-    PayoutResults p(8,262000,cards(20,4));
-    p.showStats();
+
+//    auto p = PayoutResults::PayoutResultsFactory(7,15000,cards(11,4,12,3));
+//    auto p = PayoutResults::PayoutResultsFactory(8,262000,cards(20,4));
+//    auto p = PayoutResults::PayoutResultsFactory(7,262000,cards(1,7));
+//    auto p = PayoutResults::PayoutResultsFactory(4,440,cards(20,4));
+//    auto p = PayoutResults::PayoutResultsFactory(4,440,cards(20,4));
+//    auto p = PayoutResults::PayoutResultsFactory(6,3673,cards(26,3));
+//    auto p = PayoutResults::PayoutResultsFactory(9,546'044,cards(7,9));
+    auto p = PayoutResults::PayoutResultsFactory(9,546'044,cards(5,4,4,5));
+    p->showStats();
     return 0;
 }
-
+/// cards(27,3) causes seg fault, should report error!!!!
 /*
- 4spot: $2, 4/4 pays jackpot $400+ (653)
- 5spot: $2, 4/5 $2.50, 5/5 $1700+ (3050)
- 6spot: $1.50, 4/6 $1.25, 5/6 $65, 6/6 $3500+ (9800)
- 7spot: $1.50, 5/7 $10, 6/7 $325, 7/7 $15000+ (48200)
- 8spot: $1.50, 5/8 $4, 6/8 $80, 7/8 $1480, 8/8 $48000+ (230k)
- 9spot: $1.50, 5/9 $1, 6/9 $30, 7/9 $325, 8/9 $6000, 9/9 $90000+ (1.25M)
+ 4spot: $2.00,      4/4 pays jackpot $400+ (653)
+ 5spot: $2.00,      4/5 $2.50, 5/5 $1700+ (3050)
+ 6spot: $1.50,      4/6 $1.25, 5/6 $65, 6/6 $3500+ (9800)
+ 7spot: $1.50,      5/7 $10, 6/7 $325, 7/7 $15000+ (48200)
+ 8spot: $1.50,      5/8 $4, 6/8 $80, 7/8 $1480, 8/8 $48000+ (230k)
+ 9spot: $1.50,      5/9 $1, 6/9 $30, 7/9 $325, 8/9 $6000, 9/9 $90000+ (1.25M)
 
  Progressive odds:	0.000820911					0.0820911%
  w2g odds:          0.00891184					0.8911840%
@@ -346,9 +338,6 @@ int main() {
  Trials: 10600000000 Average result: 310.378, hit probability: 0.000821143
  Trials: 10610000000 Average result: 310.377, hit probability: 0.000821140
 
-
-
-3535316142212174320
 3535316142212174320
   */
 
